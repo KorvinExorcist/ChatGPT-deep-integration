@@ -25,7 +25,7 @@ public class GPTpicturs {
                 .build();
         service.createCompletion(completionRequest).getChoices().forEach(System.out::println);
 
-        System.out.println("\nCreating Image...");
+        System.out.println("\nCreating Image");
         CreateImageRequest request = CreateImageRequest.builder()
                 .prompt(promt)
                 .build();
