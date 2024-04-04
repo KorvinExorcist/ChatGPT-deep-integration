@@ -1,0 +1,72 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Random;
+
+public class Main {
+    public static void run() {
+        int width = 1920;
+        int height = 1025;
+        int objectSize = 50;
+        int numObjects = 10;
+        int numCycles = 1000;
+        int centerX = width / 2;
+        int centerY = height / 2;
+        double radius = Math.min(centerX, centerY) - objectSize / 2;
+        double angleIncrement = 2 * Math.PI / numObjects;
+
+        Random random = new Random();
+        Object[] objects = new Object[numObjects];
+
+        for (int i = 0; i < numObjects; i++) {
+            double angle = i * angleIncrement;
+            int x = (int) (centerX + radius * Math.cos(angle));
+            int y = (int) (centerY + radius * Math.sin(angle));
+            objects[i] = new Object(i, x, y);
+        }
+
+        try {
+            FileWriter writer = new FileWriter("coordinates.txt", false);
+            for (int cycle = 0; cycle < numCycles; cycle++) {
+                for (Object object : objects) {
+                    object.move(centerX, centerY, radius, angleIncrement);
+                    writer.write(object.toString());
+                }
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Failed to write coordinates to file.");
+        }
+    }
+
+    public static void main(String[] args) {
+        run();
+    }
+}
+
+class Object {
+    private int number;
+    private int x;
+    private int y;
+    private double angle;
+
+    public Object(int number, int x, int y) {
+        this.number = number;
+        this.x = x;
+        this.y = y;
+        this.angle = 0;
+    }
+
+    public void move(int centerX, int centerY, double radius, double angleIncrement) {
+        angle += angleIncrement;
+        int newX = (int) (centerX + radius * Math.cos(angle));
+        int newY = (int) (centerY + radius * Math.sin(angle));
+        x = newX;
+        y = newY;
+    }
+
+    @Override
+    public String toString() {
+        return "Object " + number + " at (" + x + ", " + y + ")\n";
+    }
+}
+Код готов. Создано 10 объектов, которые движутся по кругу вокруг центра плоскости. Координаты каждого объекта записываются в файл coordinates.txt.

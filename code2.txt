@@ -1,0 +1,66 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Random;
+
+public class Main {
+    public static void run() {
+        int width = 1920;
+        int height = 1025;
+        int objectSize = 50;
+        int numObjects = 7;
+        int numCycles = 1000;
+
+        Random random = new Random();
+        Object[] objects = new Object[numObjects];
+
+        for (int i = 0; i < numObjects; i++) {
+            int x = random.nextInt(width - objectSize);
+            int y = random.nextInt(height - objectSize);
+            objects[i] = new Object(i, x, y);
+        }
+
+        try {
+            FileWriter writer = new FileWriter("coordinates.txt", false);
+            for (int cycle = 0; cycle < numCycles; cycle++) {
+                for (Object object : objects) {
+                    object.move(width, height);
+
+                    writer.write(object.toString());
+                }
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("��������� ������ ��� ������ � ����.");
+        }
+    }
+
+    public static void main(String[] args) {
+        run();
+    }
+}
+
+class Object {
+    private int number;
+    private int x;
+    private int y;
+    private int direction;
+
+    public Object(int number, int x, int y) {
+        this.number = number;
+        this.x = x;
+        this.y = y;
+        this.direction = 1;
+    }
+
+    public void move(int maxX, int maxY) {
+        if (x + direction * 5 >= maxX - 50 || x + direction * 5 <= 0) {
+            direction *= -1;
+        }
+        x += direction * 5;
+    }
+
+    @Override
+    public String toString() {
+        return "Object " + number + " at (" + x + ", " + y + ")\n";
+    }
+}
